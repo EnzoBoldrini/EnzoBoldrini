@@ -1,26 +1,42 @@
-name: Generate Datas
+# Nome da Action:
+name: Snake Game
 
+# Controlador do tempo que sera feitoa atualização do arquivos.
 on:
-  schedule: # execute every 12 hours
-    - cron: "* */12 * * *"
-  workflow_dispatch:
+  schedule:
+        # Sera atualizacao a cada 5 horas.
+      - cron: "0 */5 * * *"
+
+workflow_dispatch: 
 
 jobs:
-  build:
-    name: Jobs to update datas
-    runs-on: ubuntu-latest
-    steps:
-      # Snake Animation
-      - uses: Platane/snk@master
-        id: snake-gif
-        with:
-          github_user_name: EnzoBoldrini
-          svg_out_path: dist/github-contribution-grid-snake.svg
+    build:
+      runs-on: ubuntu-latest
+      steps:
 
-      - uses: crazy-max/ghaction-github-pages@v2.1.3
-        with:
-          target_branch: output
-          build_dir: dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+
+        - uses: actions/checkout@v2 
+
+        - uses: Planate/snk@master
+          id: snake-gif
+          with:
+              github_user_name: Enzo
+              gif_out_path: dist/github-contribution-grid-snake.gif
+              svg_out_path: dist/github-contribution-grid-snake.svg
+
+        - run: git status 
+
+        - name: Push changes
+          uses: ad.m/github-push-action@master
+          with:
+              github_token: ${( secrets.GITHUB_TOKEN )}
+              branch: master
+              force: true 
+
+         - user: crazy-max/ghaction-github-pages@v2.1.3
+           with:
+             target_branch: output
+             build_dir: dist
+           env:
+             GITHUB_TOKEN: ${( secrets.GITHUB_TOKEN )}
+              
